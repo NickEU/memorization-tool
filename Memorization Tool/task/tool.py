@@ -12,7 +12,6 @@ def process_input(user_choice):
 
 
 def main_menu():
-    flashcards = {}
     while True:
         user_input = util.loop_input_until_valid_answer("1. Add flashcards\n2. Practice flashcards\n3. Exit\n",
                                                         ('1', '2', '3'))
@@ -20,7 +19,7 @@ def main_menu():
             break
 
         action = process_input(user_input)
-        action(flashcards)
+        action()
     print('Bye!')
 
 
