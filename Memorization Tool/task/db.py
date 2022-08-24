@@ -30,3 +30,18 @@ def save_flashcard(question, answer):
         new_flashcard = Flashcard(question=question, answer=answer)
         session.add(new_flashcard)
         session.commit()
+
+
+def update_flashcard(flashcard):
+    with Session(engine) as session:
+        query = session.query(Flashcard)
+        card_filter = query.filter(Flashcard.id == flashcard.id)
+        card_filter.update({'question': flashcard.question, 'answer': flashcard.answer})
+        session.commit()
+
+
+def delete_flashcard(flashcard):
+    with Session(engine) as session:
+        query = session.query(Flashcard)
+        query.filter(Flashcard.id == flashcard.id).delete()
+        session.commit()
