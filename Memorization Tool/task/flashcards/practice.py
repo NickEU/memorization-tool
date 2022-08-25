@@ -1,5 +1,6 @@
 from util import loop_input_until_valid_answer, loop_input_until_nonempty_answer
 from db import get_all_flashcards, update_flashcard, delete_flashcard, Flashcard
+from enums import LeitnerBox
 
 
 def update_menu(flashcard):
@@ -20,17 +21,31 @@ def update_menu(flashcard):
         delete_flashcard(flashcard)
 
 
+def learning_menu(flashcard):
+    print(f"Answer: {flashcard.answer}")
+    is_correct_message = 'press "y" if your answer is correct:\npress "n" if your answer is wrong:\n'
+    user_input = loop_input_until_valid_answer(is_correct_message, ('y', 'n'))
+
+    if user_input == 'y':
+        flashcard.leitner_box = LeitnerBox(flashcard.leitner_box.value + 1)
+    elif user_input == 'n':
+        flashcard.leitner_box = LeitnerBox.DIFFICULT
+
+    update_flashcard(flashcard)
+
+
 def practice_flashcards():
     flashcards = get_all_flashcards()
     if not flashcards:
         print('There is no flashcard to practice!')
     else:
-        for flashcard in flashcards:
+        flashcards_sorted_by_difficulty = sorted(flashcards, key=lambda card: card.leitner_box.value)
+        for flashcard in flashcards_sorted_by_difficulty:
             start_message = f'Question: {flashcard.question}\n' \
                             f'press "y" to see the answer:\npress "n" to skip:\npress "u" to update:\n'
             user_input = loop_input_until_valid_answer(start_message, ('y', 'n', 'u'))
 
             if user_input == 'y':
-                print(f"Answer: {flashcard.answer}")
+                learning_menu(flashcard)
             elif user_input == 'u':
                 update_menu(flashcard)

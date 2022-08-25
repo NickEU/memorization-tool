@@ -1,5 +1,5 @@
 from util import loop_input_until_nonempty_answer, loop_input_until_valid_answer
-from db import save_flashcard
+from db import create_flashcard
 
 
 def add_flashcards():
@@ -12,4 +12,4 @@ def add_flashcards():
 
         question = loop_input_until_nonempty_answer('Question:')
         answer = loop_input_until_nonempty_answer('Answer:')
-        save_flashcard(question, answer)
+        create_flashcard(question, answer)
